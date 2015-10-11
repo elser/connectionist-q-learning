@@ -3,8 +3,10 @@
  */
 package game.rules;
 
+import cosmos.FieldDimensions;
 import game.Ball;
 import game.Player;
+import game.Team;
 
 import java.io.Serializable;
 
@@ -16,10 +18,17 @@ public class BallAndGoalRule extends GameRules implements Serializable {
 
     public void applyRules() {
         Ball ball = match.getBall();
+        for (Team team : match.teams) {
+            if(team.hasScored()) {
+                match.reset();
+            }
+        }
+        if (Math.abs(ball.y) >= FieldDimensions.INNER_Y) {
+            if (Math.abs(ball.x) <= FieldDimensions.GOAL_SIZE) {
+                getGoalTeam().setScored(true);
+            }
+        }
         ball.bounce();
-    }
-
-    protected void resetPlayersPositions() {
     }
 
     protected boolean matchFinished() {

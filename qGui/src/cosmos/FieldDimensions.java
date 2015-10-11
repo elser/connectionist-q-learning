@@ -16,9 +16,8 @@ import java.io.Serializable;
  */
 public class FieldDimensions implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
-    //public static final double INNER_X=65, INNER_Y=86;
+    public static final double INNER_X=65, INNER_Y=86;
     public static final double OUTER_X = 75, OUTER_Y = 100;
     public static final double MAX_DISTANCE = Math.sqrt(OUTER_X * OUTER_X + OUTER_Y * OUTER_Y);
-    public static final double GOAL_HEIGHT = 5.0;
-    public static final double GOAL_SIZE = 5.0;
+    public static final double GOAL_SIZE = INNER_X/2;
 }

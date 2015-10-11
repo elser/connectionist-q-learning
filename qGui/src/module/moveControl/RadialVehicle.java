@@ -22,8 +22,8 @@ public class RadialVehicle implements Serializable {
 
             public int execute() {
                 double speed = SPEED;
-                player.setxLimited(player.x + player.cos() * speed, 10);
-                player.setyLimited(player.y + player.sin() * speed, 10);
+                player.setxLimited(player.x + player.cos() * speed);
+                player.setyLimited(player.y + player.sin() * speed);
                 return 0;
             }
         };

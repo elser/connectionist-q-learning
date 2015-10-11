@@ -99,11 +99,11 @@ public class PosXY implements Serializable {
     }
 
     public void setx(double x) {
-        this.x = Mat.lim(x, FieldDimensions.OUTER_X);
+        this.x = Mat.lim(x, FieldDimensions.INNER_X);
     }
 
     public void sety(double y) {
-        this.y = Mat.lim(y, FieldDimensions.OUTER_Y);
+        this.y = Mat.lim(y, FieldDimensions.INNER_Y);
     }
 
     public void seth(double h) {
@@ -120,12 +120,12 @@ public class PosXY implements Serializable {
         setAng(h);
     }
 
-    public void setxLimited(double x, double margin) {
-        this.x = Mat.lim(x, FieldDimensions.OUTER_X - margin);
+    public void setxLimited(double x) {
+        this.x = Mat.lim(x, FieldDimensions.INNER_X);
     }
 
-    public void setyLimited(double y, double margin) {
-        this.y = Mat.lim(y, FieldDimensions.OUTER_Y - margin);
+    public void setyLimited(double y) {
+        this.y = Mat.lim(y, FieldDimensions.INNER_Y);
     }
 
     public void setAtOtherSideNear(PosXY setter, double radius) {

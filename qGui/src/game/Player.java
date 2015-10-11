@@ -3,10 +3,10 @@ package game;
 
 
 import cosmos.Body;
+import cosmos.FieldDimensions;
 import cosmos.PosXY;
 import module.moveControl.RadialVehicle;
 
-import java.awt.*;
 import java.io.Serializable;
 
 /**
@@ -19,8 +19,6 @@ public abstract class Player extends Body implements Serializable {
     private Fitness fitness;
     private Team team;
     public int idInTeam;
-    private Player nearestFellow;
-    private Player nearestOpponent;
     private int idInMatch;
     protected RadialVehicle vehicle;
 
@@ -32,13 +30,13 @@ public abstract class Player extends Body implements Serializable {
     }
 
     public void live() {
-        nearestFellow = team.match.nearestFellowTo(this, nearestFellow);
-        nearestOpponent = team.match.nearestOpponentTo(this, nearestOpponent);
         countPushingOthers();
         vehicle.count();
     }
 
     private void countPushingOthers() {
+        Player nearestFellow = team.match.nearestFellowTo(this);
+        Player nearestOpponent = team.match.nearestOpponentTo(this);
         if (nearestFellow != null) {
             push(nearestFellow);
         }
@@ -66,13 +64,7 @@ public abstract class Player extends Body implements Serializable {
         return idInTeam;
     }
 
-    public Color getColorRGB() {
-        return (team.teamColor == 0) ? Color.red : Color.blue;
-    }
-
     public void prepareToMatch() {
-        nearestFellow = null;
-        nearestOpponent = null;
         fitness.reset();
     }
 
@@ -98,14 +90,6 @@ public abstract class Player extends Body implements Serializable {
 
     public Fitness getFitness() {
         return fitness;
-    }
-
-    public Player getNearestFellow() {
-        return nearestFellow;
-    }
-
-    public Player getNearestOpponent() {
-        return nearestOpponent;
     }
 
     public void place(double xx, double yy, int ang) {
@@ -139,5 +123,11 @@ public abstract class Player extends Body implements Serializable {
      */
     public Team getTeam() {
         return team;
+    }
+
+    public void reset() {
+        getFitness().reset();
+        x = (idInTeam - 0.5 * team.players.length + 0.5) * FieldDimensions.INNER_X / 2;
+        y = (team.teamColor - 0.5) * FieldDimensions.INNER_Y / 2;
     }
 }

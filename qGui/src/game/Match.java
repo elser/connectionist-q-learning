@@ -94,16 +94,13 @@ public class Match implements Serializable {
         playersPlay = b;
     }
 
-    public Player nearestOpponentTo(Player player, Player lastNearest) {
+    public Player nearestOpponentTo(Player player) {
         if (teams.length < 2) {
             return null;
         }
         Team opponentTeam = teams[1 - player.getTeam().teamColor];
         double minDist = Double.MAX_VALUE;
-        if (lastNearest != null) {
-            minDist = player.distTo(lastNearest);
-        }
-        Player ret = lastNearest;
+        Player ret = null;
         for (int i = 0; i < opponentTeam.players.length; i++) {
             Player opponent = opponentTeam.players[i];
             double dist = player.distTo(opponent);
@@ -115,13 +112,10 @@ public class Match implements Serializable {
         return ret;
     }
 
-    public Player nearestFellowTo(Player player, Player lastNearest) {
+    public Player nearestFellowTo(Player player) {
         Team fellowTeam = player.getTeam();
         double minDist = FieldDimensions.MAX_DISTANCE * 2;
-        if (lastNearest != null) {
-            minDist = player.distTo(lastNearest);
-        }
-        Player ret = lastNearest;
+        Player ret = null;
         for (int i = 0; i < fellowTeam.players.length; i++) {
             Player fellow = fellowTeam.players[i];
             if (fellow.id != player.id) {
@@ -149,10 +143,17 @@ public class Match implements Serializable {
                 if (r < OUT_RADIUS) {
                     double vx = OUT_RADIUS * dx / r;
                     double vy = OUT_RADIUS * dy / r;
-                    player.setxLimited(player.x + vx - dx, 10);
-                    player.setyLimited(player.y + vy - dy, 10);
+                    player.setxLimited(player.x + vx - dx);
+                    player.setyLimited(player.y + vy - dy);
                 }
             }
+        }
+    }
+
+    public void reset() {
+        ball.reset();
+        for (Team team : teams) {
+            team.reset();
         }
     }
 }

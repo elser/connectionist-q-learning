@@ -32,21 +32,21 @@ public class FrameTimelineChart extends AbstractImageFrame {
             g.drawImage(bi, -1, 0, null);
             g.setColor(Color.white);
             g.fillRect(0, 0, 100, 20);
-            g.setColor(Color.black);
-            g.drawString("Average reward:", 2, 10);
-            int avgY = getChartY(player.getPerception().getReward());
-            g.drawLine(width - 2, lastAvgRewardY, width - 2, avgY);
-            lastAvgRewardY = avgY;
             g.setColor(Color.red);
             g.drawString("Novelty:", 2, 20);
             int avgY2 = getChartY(player.getPerception().getNovelty() * 2);
             g.drawLine(width - 2, lastAvgRewardY2, width - 2, avgY2);
             lastAvgRewardY2 = avgY2;
+            g.setColor(Color.black);
+            g.drawString("Average reward:", 2, 10);
+            int avgY = getChartY(player.getPerception().getReward());
+            g.drawLine(width - 2, lastAvgRewardY, width - 2, avgY);
+            lastAvgRewardY = avgY;
         }
     }
 
     private int getChartY(double avgReward) {
-        return (int) (height / 2 - avgReward * 5 * height / 2);
+        return (int) (height / 2 - avgReward*10 * height / 2);
     }
 
     protected void imageClicked(int x, int y, int button) {

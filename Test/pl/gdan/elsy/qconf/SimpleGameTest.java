@@ -16,12 +16,12 @@ public class SimpleGameTest {
         final int bucketsNr = 4;
         Action[] actionsArray = new Action[bucketsNr];
         perception = new GamePerceptionMock(bucketsNr);
-        brain = new Brain(perception, actionsArray, new int[]{}, 0.2, 0.0, 0.0, false, 0, 0, 1);
+        brain = new Brain(perception, actionsArray, new int[]{10}, 0.2, 0.0, 0.0, false, 0, 0, 1);
     }
 
     @Test
     public void testOneNeuron() throws Exception {
-        int itersPack = 1000000;
+        int itersPack = 10000;
         for (int i = 0; i < 20 * itersPack; i++) {
             think(itersPack, i);
         }

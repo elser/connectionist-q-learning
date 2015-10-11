@@ -53,7 +53,7 @@ public class Ball extends Body {
 
     public static final double FADEOUT_FLY = 0.99;
 
-    public static double MAX_SPEED = 400;
+    public static double MAX_SPEED = 1;
 
     private double distToGoal[] = new double[2];
 
@@ -109,7 +109,7 @@ public class Ball extends Body {
         } else if (h > 0.1) {
             vh += -0.01;
         }
-        if (!isKept && Fitness.ballIsControlled() && flyTime > 30) {
+        if (!isKept && Fitness.ballIsControlled() && flyTime > 5) {
             Fitness.resetControlBits();
         }
     }
@@ -192,15 +192,15 @@ public class Ball extends Body {
      * Makes ball pick up from the walls surrounding the soccer field.
      */
     public void bounce() {
-        if (!Mat.inside(x, FieldDimensions.OUTER_X)) {
+        if (!Mat.inside(x, FieldDimensions.INNER_X)) {
             vx = -vx * BOUNCE_A;
             vy = vy * BOUNCE_B;
-            setxLimited(x, 0);
+            setxLimited(x);
         }
-        if (!Mat.inside(y, FieldDimensions.OUTER_Y)) {
+        if (!Mat.inside(y, FieldDimensions.INNER_Y)) {
             vx = vx * BOUNCE_B;
             vy = -vy * BOUNCE_A;
-            setyLimited(y, 0);
+            setyLimited(y);
         }
     }
 
@@ -219,5 +219,11 @@ public class Ball extends Body {
 
     public double distToGoalProgress(int teamColor) {
         return distToGoalProgress[teamColor];
+    }
+
+    public void reset() {
+        x=0;
+        y=0;
+        stop();
     }
 }

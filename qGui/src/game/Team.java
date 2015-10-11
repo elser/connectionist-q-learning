@@ -25,8 +25,7 @@ public abstract class Team implements Serializable {
 
     public Match match;
     private double energy;
-    private int childrenNo;
-    private int brainType;
+    private boolean scored = false;
 
     public Team(int nPlayers) {
         energy = 0;
@@ -64,17 +63,10 @@ public abstract class Team implements Serializable {
     }
 
     public void reset() {
-        //Fitness.resetStatic();
+        scored = false;
         teamFitness.reset();
         for (int i = 0; i < players.length; i++) {
-            players[i].getFitness().reset();
-        }
-    }
-
-    public void resetEvaluation() {
-        energy = 0;
-        for (int i = 0; i < players.length; i++) {
-            players[i].resetEvaluation();
+            players[i].reset();
         }
     }
 
@@ -90,20 +82,11 @@ public abstract class Team implements Serializable {
         return teamFitness;
     }
 
-    public int getChildrenNo() {
-        return childrenNo;
+    public boolean hasScored() {
+        return scored;
     }
 
-    public void setChildrenNo(int childrenNo) {
-        this.childrenNo = childrenNo;
+    public void setScored(boolean scored) {
+        this.scored = scored;
     }
-
-    public int getBrainType() {
-        return brainType;
-    }
-
-    public void setBrainType(int brainType) {
-        this.brainType = brainType;
-    }
-
 }

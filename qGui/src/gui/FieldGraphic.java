@@ -3,6 +3,7 @@ package gui;
 import cosmos.FieldDimensions;
 import facade.Facade;
 import game.Ball;
+import game.CuriPlayer;
 import game.GameManager;
 import game.Match;
 import game.Player;
@@ -19,9 +20,7 @@ public class FieldGraphic {
     private static final int SHADOW_LEVELS = 40;
     private static final String SOCCER_FIELD_GIF = "soccer_field_small.gif";
     private static final int SELECTION_RING_RADIUS = 14;
-    private static boolean drawPlayerVariables = false;
-    private static boolean drawNearestFellow = false;
-    private static boolean drawNearestOpponent = false;
+    private static boolean drawPlayerVariables = true;
     private static boolean drawBorderDist = false;
     private static boolean drawVectorToBall = false;
     private static boolean drawTraces = false;
@@ -82,28 +81,20 @@ public class FieldGraphic {
 
         //draw players and connections between them
         for (int i = 0; players != null && i < players.length; i++) {
-
             drawPlayer(players[i], i);
-            //drawEnergyDelta(players[i]);
-
-            if (drawNearestFellow && players[i].getNearestFellow() != null) {
-                drawLine(
-                        players[i].x,
-                        players[i].y,
-                        players[i].getNearestFellow().x,
-                        players[i].getNearestFellow().y);
-            }
-            if (drawNearestOpponent && players[i].getNearestOpponent() != null) {
-                g.setColor(Color.blue);
-                drawLine(
-                        players[i].x,
-                        players[i].y,
-                        players[i].getNearestOpponent().x,
-                        players[i].getNearestOpponent().y);
-            }
         }
         drawBall(ball);
+        drawGoals();
         return bi;
+    }
+
+    private void drawGoals() {
+        for (int i = 0; i < 2; i++) {
+            int flip = i * 2 - 1;
+            final int goalDepth = 10;
+            drawRect(-FieldDimensions.GOAL_SIZE, flip * FieldDimensions.INNER_Y + ((i-1) * goalDepth),
+                    2 * FieldDimensions.GOAL_SIZE, goalDepth);
+        }
     }
 
     private void transp() {
@@ -210,7 +201,7 @@ public class FieldGraphic {
     }
 
     private int scaledY(double y) {
-        return (int) ((FieldDimensions.OUTER_Y + y) * scale);
+        return (int) ((FieldDimensions.OUTER_Y + y) * scale + 3);
     }
 
     private int scaled(double d) {
@@ -230,6 +221,11 @@ public class FieldGraphic {
     private void drawPlayer(Player player, int id) {
         int xp = scaledX(player.x);
         int yp = scaledY(player.y);
+        if (drawPlayerVariables) {
+            CuriPlayer curiPlayer = (CuriPlayer) player;
+            g.setColor(Color.green);
+            g.drawString("" + curiPlayer.getPerception().getReward(), xp - 5, yp - 20);
+        }
         double R = 15;
         double sin = player.sin(), cos = player.cos();
         x[0] = (int) (xp + cos * R);
@@ -340,22 +336,6 @@ public class FieldGraphic {
 
     public static void setDrawBorderDist(boolean drawBorderDist) {
         FieldGraphic.drawBorderDist = drawBorderDist;
-    }
-
-    public static boolean isDrawNearestFellow() {
-        return drawNearestFellow;
-    }
-
-    public static void setDrawNearestFellow(boolean drawNearestFellow) {
-        FieldGraphic.drawNearestFellow = drawNearestFellow;
-    }
-
-    public static boolean isDrawNearestOpponent() {
-        return drawNearestOpponent;
-    }
-
-    public static void setDrawNearestOpponent(boolean drawNearestOpponent) {
-        FieldGraphic.drawNearestOpponent = drawNearestOpponent;
     }
 
     public static boolean isDrawVectorToBall() {

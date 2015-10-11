@@ -11,7 +11,6 @@ import java.io.Serializable;
 public class Body extends PosXY implements Serializable {
     private static final long serialVersionUID = 1L;
     public int id;
-    int[] worldPointsNo;
     private static int idCounter;
 
     public Body() {

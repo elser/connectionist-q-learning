@@ -188,7 +188,6 @@ public class Brain implements Serializable {
      * @see Brain#executeAction()
      */
     public void count() {
-        setGamma(0.995);
         a = selectAction();
         if (tactCounter > 0) {
             double r = perception.getReward();        // r(t-1)
@@ -256,12 +255,13 @@ public class Brain implements Serializable {
                     }
                 }
                 double activ = activation[l][i];
+                double gli;
                 if (unipolar) {
-                    g[l][i] = activ * (1 - activ) * error; //uni
+                    gli = activ * (1 - activ) * error; //uni
                 } else {
-                    g[l][i] = 0.5 * (1 - activ * activ) * error; //bi
+                    gli = 0.5 * (1 - activ * activ) * error; //bi
                 }
-                double gli = g[l][i];
+                g[l][i] = gli;
                 for (int j = 0; j < w[l][i].length; j++) {
                     e[l][i][j] = gamma * lambda * e[l][i][j] + gli * layerInput[l][j];
                 }

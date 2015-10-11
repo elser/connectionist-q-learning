@@ -66,7 +66,7 @@ public class Fitness implements Serializable {
             controlTime++;
             ballProgress = ball.distToGoalProgress(player.getTeam().teamColor);
         }
-        crashBorder = Math.abs(player.x) == FieldDimensions.OUTER_X || Math.abs(player.y) == FieldDimensions.OUTER_Y;
+        crashBorder = Math.abs(player.x) == FieldDimensions.INNER_X || Math.abs(player.y) == FieldDimensions.INNER_Y;
     }
 
     public void reset() {

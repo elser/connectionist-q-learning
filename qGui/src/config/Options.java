@@ -40,7 +40,7 @@ public class Options implements Serializable {
             speedIter = speed == 0 ? 0 : speed / 4 + 1;
             speedWait = (44 - speed) * 3;
             fieldDispRate = 20;
-            listDispRate = 500;
+            listDispRate = 20;
         } else if (speed < 100) {
             speedIter = speed * 2 - 70;
             fieldDispRate = (speed - 40) * speed / 50;

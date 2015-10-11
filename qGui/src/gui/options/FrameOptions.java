@@ -116,22 +116,6 @@ public class FrameOptions extends WindowFrame {
             }
 
         });
-        final JCheckBox showNearestFellow = new JCheckBox("Show nearest fellow");
-        showNearestFellow.setSelected(FieldGraphic.isDrawNearestFellow());
-        showNearestFellow.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                FieldGraphic.setDrawNearestFellow(showNearestFellow.isSelected());
-            }
-
-        });
-        final JCheckBox showNearestOpponent = new JCheckBox("Show nearest opponent");
-        showNearestOpponent.setSelected(FieldGraphic.isDrawNearestOpponent());
-        showNearestOpponent.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                FieldGraphic.setDrawNearestOpponent(showNearestOpponent.isSelected());
-            }
-
-        });
         final JCheckBox showPlayerInfo = new JCheckBox("Show player info");
         showPlayerInfo.setSelected(FieldGraphic.isDrawPlayerVariables());
         showPlayerInfo.addChangeListener(new ChangeListener() {
@@ -161,8 +145,6 @@ public class FrameOptions extends WindowFrame {
         fieldDrawingPanel.add(showBorderDist);
         //TODO: what does it exactly show...
         //fieldDrawingPanel.add(showVectorToBall);
-        fieldDrawingPanel.add(showNearestFellow);
-        fieldDrawingPanel.add(showNearestOpponent);
         fieldDrawingPanel.add(showPlayerInfo);
         fieldDrawingPanel.add(showTraces);
         graphicsPanel.add(fieldDrawingPanel);

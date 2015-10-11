@@ -14,7 +14,6 @@ import java.io.Serializable;
  * @author Dominik
  */
 public abstract class GameRules implements Serializable {
-    public static final int TIME_TO_THINK_OUT = 2;
     private static final long serialVersionUID = 1L;
     protected Match match = null;
     private boolean successNoted;
@@ -35,10 +34,6 @@ public abstract class GameRules implements Serializable {
 
     public abstract double minScoreToWin();
 
-    protected double scorePolarizationFactor() {
-        return 0;
-    }
-
     private int gameTime;
 
     protected void scoreTeams() {
@@ -58,13 +53,6 @@ public abstract class GameRules implements Serializable {
             }
             match.teams[i].setEnergy(scoreSum);
         }
-        /*
-		if(match.teams.length > 1) {
-			double scoreDelta = match.teams[1].getEnergy() - match.teams[0].getEnergy();
-			match.teams[0].addEnergy(-scoreDelta * scorePolarizationFactor());
-			match.teams[1].addEnergy( scoreDelta * scorePolarizationFactor());
-		}*/
-        //System.out.println(getGoalTeam().getEnergy()+" "+getLooserTeam().getEnergy());
     }
 
     public boolean isGameOver() {
@@ -85,10 +73,6 @@ public abstract class GameRules implements Serializable {
 
     protected Team getGoalTeam() {
         return match.teams[(match.getBall().y > 0) ? 0 : 1];
-    }
-
-    protected Team getLooserTeam() {
-        return match.teams[(match.getBall().y > 0) ? 1 : 0];
     }
 
     public void start() {

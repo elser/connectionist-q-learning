@@ -201,7 +201,7 @@ public class Mat {
     }
 
     public static double minDist(double a, double b, double c, double d) {
-        double min = FieldDimensions.MAX_DISTANCE;
+        double min = FieldDimensions.MAX_DISTANCE * 2;
         if (a > 0 && a < min) {
             min = a;
         }

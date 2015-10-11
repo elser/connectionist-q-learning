@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="WINDOWS-1250" standalone="no"?>
+<jardesc>
+    <jar path="D:/Moje/Elsy/qqCuriSoccer.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/qqCuriSoccer/META-INF/jar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="false" manifestLocation="/qqCuriSoccer/META-INF/MANIFEST.MF" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;game.rules"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;main"/>
+        <file path="/qqCuriSoccer/soccer_field_small.gif"/>
+        <file path="/qqCuriSoccer/java.policy.applet"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;gui.options"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;gui.metalworks"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;gui"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;game"/>
+        <file path="/qqCuriSoccer/options.dat"/>
+        <file path="/qqCuriSoccer/README"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;evolution"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;gui.chart"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;cosmos"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;facade"/>
+        <folder path="/qqCuriSoccer/META-INF"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;module.brain.perception"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;tool"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;evolution.variants"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;gui.common"/>
+        <file path="/qqCuriSoccer/.classpath"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;gui.options.learning"/>
+        <file path="/qqCuriSoccer/results.txt"/>
+        <folder path="/qqCuriSoccer/.settings"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;config"/>
+        <file path="/qqCuriSoccer/.project"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;module.moveControl"/>
+        <javaElement handleIdentifier="=qqCuriSoccer/&lt;images.pictograms"/>
+    </selectedElements>
+</jardesc>

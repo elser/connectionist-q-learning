@@ -35,17 +35,17 @@ public class Ball extends Body {
 
     public static final double LEG_RADIUS = 10;
 
-    public static final double KICK_FORCE = 1.0;
+    public static final double KICK_FORCE = 5.0;
 
-    public static final double KICK_FORCE_VERT = 0.03;
+    public static final double KICK_FORCE_VERT = 0.01;
 
-    public static final double KEEP_BALL_FORCE = 0.08;
+    public static final double KEEP_BALL_FORCE = 0.2;
 
     public static final double PICKUP_FORCE = 0.0;
 
-    public static final double PICKUP_RADIUS = 1.0;
+    public static final double PICKUP_RADIUS = 4.0;
 
-    public static final double PLAYER_HEIGHT = 4.0;
+    public static final double PLAYER_HEIGHT = 10.0;
 
     public static final double FADEOUT = 0.98;
 
@@ -53,7 +53,7 @@ public class Ball extends Body {
 
     public static final double FADEOUT_FLY = 0.99;
 
-    public static double MAX_SPEED = 1;
+    public static double MAX_SPEED = 5.0;
 
     private double distToGoal[] = new double[2];
 
@@ -160,9 +160,9 @@ public class Ball extends Body {
             double dx = (player.x + LEG_LENGTH * cosH) - x;
             double dy = (player.y + LEG_LENGTH * sinH) - y;
             double r = dx * dx + dy * dy;
-            if (r < LEG_RADIUS * LEG_RADIUS && r > 0) {
+            if (r < LEG_RADIUS * LEG_RADIUS) {
                 // keep the ball
-                if (flyTime == 0 || flyTime > 80) {
+                if (flyTime == 0 || flyTime > 40) {
                     if (!vehicle.isKicking()) {
                         double sqrt = Mat.fastSqrt(r);
                         double multi = KEEP_BALL_FORCE * sqrt;

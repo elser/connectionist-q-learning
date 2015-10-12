@@ -188,11 +188,6 @@ public class Brain implements Serializable {
      * @see Brain#executeAction()
      */
     public void count() {
-        alpha = 0.2;
-        gamma = 0.5;
-        lambda = 0.95;
-        useBoltzmann = false;
-        temperature = 0.01;
         a = selectAction();
         if (tactCounter > 0) {
             double r = perception.getReward();        // r(t-1)
@@ -211,6 +206,11 @@ public class Brain implements Serializable {
      * @return number of the selected action
      */
     private int selectAction() {
+        alpha = 0.2;
+        gamma = 0.99;
+        lambda = 0.5;
+        useBoltzmann = true;
+        temperature = 0.01;
         int a = -1;
         Qmax = -1;
         propagate();

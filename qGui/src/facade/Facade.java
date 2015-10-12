@@ -38,7 +38,7 @@ public class Facade {
     }
 
     public void startNewEvolution() {
-        GameManager.getInstance();
+        GameManager.getInstance().start();
     }
 
     public synchronized void attachGUIToScenario(CommonDesktopPane desktopPane) {

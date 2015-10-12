@@ -2,6 +2,7 @@ package module.brain.perception;
 
 import cosmos.FieldDimensions;
 import cosmos.PosXY;
+import game.Ball;
 import game.CuriGameManager;
 import game.Player;
 import pl.gdan.elsy.qconf.curiosity.CuriousPlayerPerception;
@@ -25,6 +26,10 @@ public class MyPerception extends CuriousPlayerPerception {
 //        if (player.getTeam().controlsBall() && !player.getTeam().keepsBall()) {
 //            ret += 0.01;
 //        }
+        if (player.getTeam().match != null) {
+            final Ball ball = player.getTeam().match.getBall();
+            ret += (player.getTeam().teamColor == 0 ? 1 : -1) * ball.vy * 0.001;
+        }
         if (player.getTeam().hasScored()) {
             ret += 1;
         }

@@ -28,7 +28,9 @@ public class MyPerception extends CuriousPlayerPerception {
 //        }
         if (player.getTeam().match != null) {
             final Ball ball = player.getTeam().match.getBall();
-            ret += (player.getTeam().teamColor == 0 ? 1 : -1) * ball.vy * 0.001;
+            if (ball.isLimitedTo(FieldDimensions.INNER_X - Player.PUSH_RADIUS, FieldDimensions.INNER_Y - Player.PUSH_RADIUS)) {
+                ret += (player.getTeam().teamColor == 0 ? 1 : -1) * ball.vy * 0.0001;
+            }
         }
         if (player.getTeam().hasScored()) {
             ret += 1;

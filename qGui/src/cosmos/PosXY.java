@@ -177,4 +177,8 @@ public class PosXY implements Serializable {
         y = -y;
         angh90 += 180;
     }
+
+    public boolean isLimitedTo(double xLimit, double yLimit) {
+        return Mat.inside(x, xLimit) && Mat.inside(y, yLimit);
+    }
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class RadialVehicle implements Serializable {
     private static final long serialVersionUID = 1L;
     private static int TURN_ANGLE = 20;
-    private static final double SPEED = 1.0;
+    private static final double SPEED = 5.0;
     private VehAction[] actions;
     protected Player player;
     private boolean kicking;

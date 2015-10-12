@@ -19,9 +19,9 @@ public class MyPerception extends CuriousPlayerPerception {
     @Override
     public double getReward() {
         double ret = 0;
-//        if (player.getFitness().controlsBall() && !player.getFitness().keepsBall()) {
-//            ret = 0.1;
-//        }
+        if (player.getFitness().controlsBall() && !player.getFitness().keepsBall()) {
+            ret = 0.05;
+        }
 //        if (player.getTeam().controlsBall() && !player.getTeam().keepsBall()) {
 //            ret += 0.01;
 //        }
@@ -33,7 +33,7 @@ public class MyPerception extends CuriousPlayerPerception {
 //                ret -= 0.01;
 //            }
             if (player.getOpponentTeam().hasScored()) {
-                ret -= 1;
+                ret -= 0.5;
             }
         }
         return ret;

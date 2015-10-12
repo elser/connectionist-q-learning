@@ -188,9 +188,9 @@ public class Brain implements Serializable {
      * @see Brain#executeAction()
      */
     public void count() {
-        alpha = 0.05;
-        gamma = 0.95;
-        lambda = 0.5;
+        alpha = 0.2;
+        gamma = 0.5;
+        lambda = 0.95;
         useBoltzmann = false;
         temperature = 0.01;
         a = selectAction();

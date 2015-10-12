@@ -33,11 +33,11 @@ public class Player {
         actionArray[TURN_LEFT] = new TurnLeft(this);
         actionArray[TURN_RIGHT] = new TurnRight(this);
         perception = new MyPerception(this);
-        brain = new Brain(perception, actionArray);
-        brain.setAlpha(0.1);
-        brain.setGamma(0.9);
-        brain.setLambda(0.5);
-        brain.setRandActions(10);
+        brain = new Brain(perception, actionArray, new int[] {10}, 0.5, 0.8, 0.5, false, 0.05, 1, 1);
+//        brain.setAlpha(0.5);
+//        brain.setGamma(0.5);
+//        brain.setLambda(0.8);
+//        brain.setRandActions(1);
     }
 
     public void count() {

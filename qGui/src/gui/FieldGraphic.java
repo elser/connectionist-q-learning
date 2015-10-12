@@ -20,7 +20,7 @@ public class FieldGraphic {
     private static final int SHADOW_LEVELS = 40;
     private static final String SOCCER_FIELD_GIF = "soccer_field_small.gif";
     private static final int SELECTION_RING_RADIUS = 14;
-    private static boolean drawPlayerVariables = true;
+    private static boolean drawPlayerVariables = false;
     private static boolean drawBorderDist = false;
     private static boolean drawVectorToBall = false;
     private static boolean drawTraces = false;

@@ -116,7 +116,7 @@ public class Graphic {
         int yp;
         g.setColor(Color.blue);
         for (int d = 1; d <= 3; d++) {
-            for (int a = -1; a <= 1; a++) {
+            for (int a = -MyPerception.RADAR_ANGLES; a <= MyPerception.RADAR_ANGLES; a++) {
                 xp = scaledX(player.getPerception().xPerc(d, a));
                 yp = scaledY(player.getPerception().yPerc(d, a));
                 g.drawOval(xp - 1, yp - 1, 3, 3);

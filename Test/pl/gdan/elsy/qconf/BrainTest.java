@@ -22,7 +22,7 @@ public class BrainTest {
     public void setUp() throws Exception {
         Action[] actionsArray = new Action[1];
         perception = new PerceptionMock();
-        brain = new Brain(perception, actionsArray, new int[]{}, 1.0, 0.9, 0.0, false, 0, 0, 5);
+        brain = new Brain(perception, actionsArray, new int[]{}, 1.0, 0.9, 0.0, false, Brain.TEMPERATURE_DEFAULT, 0, 5);
     }
 
     @Test
@@ -37,5 +37,15 @@ public class BrainTest {
             }
         }
         Assert.assertThat(brain.getOutput()[0], is(closeTo(reward, 0.1)));
+    }
+
+
+    @Test
+    public void testCountBoltzman() throws Exception {
+        for (int i = -10; i < 10; i++) {
+            final double q = 0.1 * i;
+            final double boltzman = brain.countBoltzman(q);
+            System.out.println(q + " " + boltzman);
+        }
     }
 }

@@ -23,10 +23,10 @@ public class CuriPlayer extends Player {
         super(team);
         perception = new MyPerception(this);
         perception.setAddRandomInput(true);
-        brain = new CuriousBrain(perception, vehicle.getActions(), new int[]{40,20}, new int[]{});
-        brain.setAlpha(0.5);
-        brain.setGamma(0.995);
-        brain.setLambda(0.1);
+        brain = new CuriousBrain(perception, vehicle.getActions(), new int[]{20}, new int[]{});
+        brain.setAlpha(0.2);
+        brain.setGamma(0.99);
+        brain.setLambda(0.8);
         brain.setRandActions(1);
         ErrorBackpropagationNN predictionNN = brain.getCuriosity().getNn();
         predictionNN.setAlpha(0.5);

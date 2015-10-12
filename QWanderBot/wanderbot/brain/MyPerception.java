@@ -7,6 +7,7 @@ public class MyPerception extends Perception {
     private static final long serialVersionUID = 1L;
     private static final double RADAR_R = 0.5;
     private static final double RADAR_D = 10;
+    public static final int RADAR_ANGLES = 2;
     private Player player;
 
     public MyPerception(Player player) {
@@ -15,20 +16,20 @@ public class MyPerception extends Perception {
 
     public double getReward() {
         if (player.movingForwardWell()) {
-            return 0.1;
+            return 0.5;
         }
         if (player.collides()) {
-            return -0.2;
+            return -0.5;
         }
         return 0.0;
     }
 
     protected void updateInputValues() {
         for (int d = 1; d <= 3; d++) {
-            for (int a = -1; a <= 1; a++) {
+            for (int a = -RADAR_ANGLES; a <= RADAR_ANGLES; a++) {
                 double xPerc = xPerc(d, a);
                 double yPerc = yPerc(d, a);
-                setNextValue(player.getWorld().pointInObstacle(xPerc, yPerc) ? 5 : -5);
+                setNextValue(player.getWorld().pointInObstacle(xPerc, yPerc) ? 1 : -1);
             }
         }
     }
@@ -43,7 +44,7 @@ public class MyPerception extends Perception {
 
     @Override
     public boolean isUnipolar() {
-        return true;
+        return false;
     }
 
 }

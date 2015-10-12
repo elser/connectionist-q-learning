@@ -25,7 +25,7 @@ public class Ball extends Body {
 
     private double vx;
 
-    private double vy;
+    public double vy;
 
     private double vh;
 
@@ -35,9 +35,9 @@ public class Ball extends Body {
 
     public static final double LEG_RADIUS = 10;
 
-    public static final double KICK_FORCE = 2.0;
+    public static final double KICK_FORCE = 1.0;
 
-    public static final double KICK_FORCE_VERT = 0.1;
+    public static final double KICK_FORCE_VERT = 0.03;
 
     public static final double KEEP_BALL_FORCE = 0.08;
 

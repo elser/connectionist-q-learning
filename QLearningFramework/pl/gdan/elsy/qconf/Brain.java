@@ -87,7 +87,7 @@ public class Brain implements Serializable {
      * Boltzmann temperature
      */
     private double temperature;
-    private static final double TEMPERATURE_DEFAULT = 0.002;
+    static final double TEMPERATURE_DEFAULT = 0.03;
 
     /**
      * Maximal current Q-value
@@ -188,6 +188,11 @@ public class Brain implements Serializable {
      * @see Brain#executeAction()
      */
     public void count() {
+        alpha = 0.05;
+        gamma = 0.95;
+        lambda = 0.5;
+        useBoltzmann = false;
+        temperature = 0.01;
         a = selectAction();
         if (tactCounter > 0) {
             double r = perception.getReward();        // r(t-1)
@@ -211,7 +216,7 @@ public class Brain implements Serializable {
         propagate();
         for (int i = 0; i < Q.length; i++) {
             if (useBoltzmann) {
-                boltzValues[i] = Math.exp(Q[i] / temperature);
+                boltzValues[i] = countBoltzman(Q[i]);
             }
             if (Qmax < Q[i]) {
                 a = i;
@@ -234,6 +239,10 @@ public class Brain implements Serializable {
         }
         Qmax = Q[a];
         return a;
+    }
+
+    protected double countBoltzman(double q) {
+        return Math.exp(q / temperature);
     }
 
     /**

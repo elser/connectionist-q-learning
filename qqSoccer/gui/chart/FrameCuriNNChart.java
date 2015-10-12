@@ -14,7 +14,7 @@ public class FrameCuriNNChart extends AbstractImageFrame {
 
     public FrameCuriNNChart() {
         super("Brain Signals", true, true, false, false);
-        setSize(400, 800);
+        setSize(600, 800);
         start();
     }
 
@@ -39,16 +39,16 @@ public class FrameCuriNNChart extends AbstractImageFrame {
             drawArray("QLearning net output", Color.black, brain.getOutput(), 0, (step++) * yStep, xSize, ySize);
 
             step = 0;
-            yStep = 40;
+            yStep = 10;
             for (double[][] ww : brain.getW()) {
                 for (double[] www : ww) {
-                    drawNet(Color.red, www, 200, (step++) * yStep, xSize, ySize, 1);
+                    drawNet(Color.red, www, 100, (step++) * yStep, xSize, ySize, 1);
                 }
             }
             step = 0;
             for (double[][] ww : brain.getE()) {
                 for (double[] www : ww) {
-                    drawNet(Color.magenta, www, 300, (step++) * yStep, xSize, ySize, 100000);
+                    drawNet(Color.magenta, www, 300, (step++) * yStep, xSize, ySize, 10);
                 }
             }
             step = 5;

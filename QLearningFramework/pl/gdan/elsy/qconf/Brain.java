@@ -87,7 +87,7 @@ public class Brain implements Serializable {
      * Boltzmann temperature
      */
     private double temperature;
-    private static final double TEMPERATURE_DEFAULT = 0.002;
+    static final double TEMPERATURE_DEFAULT = 0.03;
 
     /**
      * Maximal current Q-value
@@ -239,6 +239,10 @@ public class Brain implements Serializable {
         }
         Qmax = Q[a];
         return a;
+    }
+
+    protected double countBoltzman(double q) {
+        return Math.exp(q / temperature);
     }
 
     /**

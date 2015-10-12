@@ -25,7 +25,7 @@ public class Ball extends Body {
 
     private double vx;
 
-    private double vy;
+    public double vy;
 
     private double vh;
 

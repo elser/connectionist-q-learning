@@ -35,7 +35,7 @@ public class Ball extends Body {
 
     public static final double LEG_RADIUS = 10;
 
-    public static final double KICK_FORCE = 5.0;
+    public static final double KICK_FORCE = 10.0;
 
     public static final double KICK_FORCE_VERT = 0.01;
 
@@ -51,9 +51,9 @@ public class Ball extends Body {
 
     public static final double FADEOUT_KEEPBALL = 0.8;
 
-    public static final double FADEOUT_FLY = 0.99;
+    public static final double FADEOUT_FLY = 0.98;
 
-    public static double MAX_SPEED = 5.0;
+    public static double MAX_SPEED = 10.0;
 
     private double distToGoal[] = new double[2];
 
@@ -162,7 +162,7 @@ public class Ball extends Body {
             double r = dx * dx + dy * dy;
             if (r < LEG_RADIUS * LEG_RADIUS) {
                 // keep the ball
-                if (flyTime == 0 || flyTime > 40) {
+                if (flyTime == 0 || flyTime > 10) {
                     if (!vehicle.isKicking()) {
                         double sqrt = Mat.fastSqrt(r);
                         double multi = KEEP_BALL_FORCE * sqrt;
@@ -209,7 +209,7 @@ public class Ball extends Body {
         vy = 0;
         vh = 0;
         isKept = false;
-        flyTime = 0;
+        flyTime = 100;
         this.lastKeepPos.set(this);
     }
 

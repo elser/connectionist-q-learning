@@ -206,9 +206,9 @@ public class Brain implements Serializable {
      * @return number of the selected action
      */
     private int selectAction() {
-        alpha = 0.2;
+        alpha = 0.002;
         gamma = 0.99;
-        lambda = 0.5;
+        lambda = 0.9;
         useBoltzmann = true;
         temperature = 0.01;
         int a = -1;

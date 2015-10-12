@@ -23,7 +23,7 @@ public class BallAndGoalRule extends GameRules implements Serializable {
                 match.reset();
             }
         }
-        if (Math.abs(ball.y) >= FieldDimensions.INNER_Y) {
+        if (Math.abs(ball.y) >= FieldDimensions.INNER_Y - Player.PUSH_RADIUS) {
             if (Math.abs(ball.x) <= FieldDimensions.GOAL_SIZE) {
                 getGoalTeam().setScored(true);
             }

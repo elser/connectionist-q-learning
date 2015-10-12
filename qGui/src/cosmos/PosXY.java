@@ -120,12 +120,12 @@ public class PosXY implements Serializable {
         setAng(h);
     }
 
-    public void setxLimited(double x) {
-        this.x = Mat.lim(x, FieldDimensions.INNER_X);
+    public void setxLimited(double x, double border) {
+        this.x = Mat.lim(x, FieldDimensions.INNER_X - border);
     }
 
-    public void setyLimited(double y) {
-        this.y = Mat.lim(y, FieldDimensions.INNER_Y);
+    public void setyLimited(double y, double border) {
+        this.y = Mat.lim(y, FieldDimensions.INNER_Y - border);
     }
 
     public void setAtOtherSideNear(PosXY setter, double radius) {

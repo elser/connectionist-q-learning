@@ -143,8 +143,8 @@ public class Match implements Serializable {
                 if (r < OUT_RADIUS) {
                     double vx = OUT_RADIUS * dx / r;
                     double vy = OUT_RADIUS * dy / r;
-                    player.setxLimited(player.x + vx - dx);
-                    player.setyLimited(player.y + vy - dy);
+                    player.setxLimited(player.x + vx - dx, Player.PUSH_RADIUS);
+                    player.setyLimited(player.y + vy - dy, Player.PUSH_RADIUS);
                 }
             }
         }

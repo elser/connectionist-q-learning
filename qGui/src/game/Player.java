@@ -14,8 +14,8 @@ import java.io.Serializable;
  */
 public abstract class Player extends Body implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final double PUSH_RADIUS = 8.0;
-    private static final double PUSH_FORCE = 0.9;
+    public static final double PUSH_RADIUS = 10.0;
+    private static final double PUSH_FORCE = 1.1;
     private Fitness fitness;
     private Team team;
     public int idInTeam;

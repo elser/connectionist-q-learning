@@ -22,7 +22,6 @@ public abstract class GameManager extends Thread implements Serializable {
     private int time = 0;
     private static long lastSaveTime;
     private static final long TEMP_SAVE_INTERVAL = 120 * 60 * 1000; //120 minutes
-    public static boolean stopTime = true;
     private static GameManager instance;
     private Match match;
     public static boolean running;

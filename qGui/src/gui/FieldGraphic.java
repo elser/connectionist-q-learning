@@ -62,8 +62,7 @@ public class FieldGraphic {
         if (false) {
             drawGaussTest();
         }
-        g.drawString("" + UGLY_GLOBAL + " kb=" + selected.getFitness().keepsBall() + " cb=" + selected.getFitness().controlsBall() + " tkb=" +
-                selected.getTeam().keepsBall() + " tcb=" + selected.getTeam().controlsBall(), 10, 10);
+        g.drawString("" + UGLY_GLOBAL + " ft=" + match.getBall().flyTime, 10, 10);
         drawTimeline(match);
         if (false) {
             drawMatchBallPosition(match);

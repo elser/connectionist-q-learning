@@ -35,13 +35,13 @@ public class Ball extends Body {
 
     public static final double LEG_RADIUS = 10;
 
-    public static final double KICK_FORCE = 10.0;
+    public static final double KICK_FORCE = 3.0;
 
     public static final double KICK_FORCE_VERT = 0.01;
 
     public static final double KEEP_BALL_FORCE = 0.2;
 
-    public static final double PICKUP_FORCE = 0.0;
+    public static final double PICKUP_FORCE = 0.3;
 
     public static final double PICKUP_RADIUS = 4.0;
 
@@ -53,7 +53,7 @@ public class Ball extends Body {
 
     public static final double FADEOUT_FLY = 0.98;
 
-    public static double MAX_SPEED = 10.0;
+    public static double MAX_SPEED = KICK_FORCE * 2;
 
     private double distToGoal[] = new double[2];
 
@@ -178,7 +178,7 @@ public class Ball extends Body {
         } else {
             player.getFitness().lostBall();
         }
-        if (flyTime <= 1 && player.getFitness().keepsBall() && vehicle.isKicking()) {
+        if (flyTime <= 5 && player.getFitness().keepsBall() && vehicle.isKicking()) {
             vx = cosH * KICK_FORCE;
             vy = sinH * KICK_FORCE;
             vh += KICK_FORCE_VERT;
@@ -195,12 +195,12 @@ public class Ball extends Body {
         if (!Mat.inside(x, FieldDimensions.INNER_X)) {
             vx = -vx * BOUNCE_A;
             vy = vy * BOUNCE_B;
-            setxLimited(x);
+            setxLimited(x, 0);
         }
         if (!Mat.inside(y, FieldDimensions.INNER_Y)) {
             vx = vx * BOUNCE_B;
             vy = -vy * BOUNCE_A;
-            setyLimited(y);
+            setyLimited(y, 0);
         }
     }
 

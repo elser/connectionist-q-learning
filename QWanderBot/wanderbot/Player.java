@@ -9,8 +9,8 @@ import wanderbot.brain.actions.TurnLeft;
 import wanderbot.brain.actions.TurnRight;
 
 public class Player {
-    public static final double TURNING_ANGLE = 0.5;
-    public static final double STEP_SIZE = 10.0;
+    public static final double TURNING_ANGLE = MyPerception.RADAR_R;
+    public static final double STEP_SIZE = MyPerception.RADAR_D;
     public static final double AVG_FORGET = 0.01;
     private static final int MOVE_FORWARD = 0;
     private static final int TURN_LEFT = 1;
@@ -33,7 +33,7 @@ public class Player {
         actionArray[TURN_LEFT] = new TurnLeft(this);
         actionArray[TURN_RIGHT] = new TurnRight(this);
         perception = new MyPerception(this);
-        brain = new Brain(perception, actionArray, new int[] {}, 20.0, 0.9, 0.9, true, 0.1, 5, 1);
+        brain = new Brain(perception, actionArray, new int[] {}, 0.5, 0.9, 0.9, false, 0.05, 5, 0.2);
 //        brain.setAlpha(0.5);
 //        brain.setGamma(0.5);
 //        brain.setLambda(0.8);
@@ -56,7 +56,8 @@ public class Player {
         double yOld = y;
         x += Math.cos(angle) * step;
         y += Math.sin(angle) * step;
-        if (world.isCollision()) {
+//        if (world.isCollision()) {
+        if(perception.getFrontPixel()>0.5) {
             x = xOld;
             y = yOld;
             return 0;

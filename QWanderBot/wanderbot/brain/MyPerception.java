@@ -5,9 +5,10 @@ import wanderbot.Player;
 
 public class MyPerception extends Perception {
     private static final long serialVersionUID = 1L;
-    private static final double RADAR_R = 0.5;
-    private static final double RADAR_D = 10;
+    public static final double RADAR_R = 0.5;
+    public static final double RADAR_D = 10;
     public static final int RADAR_ANGLES = 2;
+    public static final int RADAR_STEPS = 2;
     private Player player;
 
     public MyPerception(Player player) {
@@ -16,16 +17,16 @@ public class MyPerception extends Perception {
 
     public double getReward() {
         if (player.movingForwardWell()) {
-            return 0.5;
+            return 0.1;
         }
         if (player.collides()) {
-            return -0.5;
+            return -0.9;
         }
-        return -0.01;
+        return 0;
     }
 
     protected void updateInputValues() {
-        for (int d = 1; d <= 3; d++) {
+        for (int d = 1; d <= RADAR_STEPS; d++) {
             for (int a = -RADAR_ANGLES; a <= RADAR_ANGLES; a++) {
                 double xPerc = xPerc(d, a);
                 double yPerc = yPerc(d, a);
@@ -44,7 +45,10 @@ public class MyPerception extends Perception {
 
     @Override
     public boolean isUnipolar() {
-        return false;
+        return true;
     }
 
+    public double getFrontPixel() {
+        return getOutput()[RADAR_ANGLES];
+    }
 }

@@ -54,13 +54,13 @@ public class FrameCuriNNChart extends AbstractImageFrame {
             step = 5;
             yStep = 40;
             for (double[] ww : brain.getActivation()) {
-                    drawNet(Color.blue, ww, 50, (step++) * yStep, xSize, ySize, 1);
+                    drawNet(Color.blue, ww, 50, (step++) * yStep, xSize, ySize, 0.01);
             }
 
         }
     }
 
-    private void drawNet(Color color, double[] output, int x0, int y0, int xSize, int ySize, int scale) {
+    private void drawNet(Color color, double[] output, int x0, int y0, int xSize, int ySize, double scale) {
         int y1 = y0 + ySize * 2;
         g.setColor(Color.gray);
         g.drawLine(x0, y1, x0 + output.length * xSize, y1);

@@ -84,9 +84,9 @@ public class Brain implements Serializable {
     private boolean useBoltzmann;
     private static final boolean USE_BOLTZMANN_DEFAULT = false;
     /**
-     * Boltzmann temperature
+     * Boltzmann boltzmanTemperature
      */
-    private double temperature;
+    private double boltzmanTemperature;
     static final double TEMPERATURE_DEFAULT = 0.03;
 
     /**
@@ -127,7 +127,7 @@ public class Brain implements Serializable {
         this.lambda = lambda;
         this.gamma = gamma;
         this.useBoltzmann = useBoltzmann;
-        this.temperature = temperature;
+        this.boltzmanTemperature = temperature;
         this.randActions = randActions;
         this.maxWeight = maxWeight;
         neuronsNo = new int[hiddenNeuronsNo.length + 1];
@@ -206,11 +206,6 @@ public class Brain implements Serializable {
      * @return number of the selected action
      */
     private int selectAction() {
-        alpha = 0.002;
-        gamma = 0.99;
-        lambda = 0.9;
-        useBoltzmann = true;
-        temperature = 0.01;
         int a = -1;
         Qmax = -1;
         propagate();
@@ -227,13 +222,6 @@ public class Brain implements Serializable {
         if (useBoltzmann) {
             a = RR.pickBestIndex(boltzValues);
         }
-        /*if(a != aMax) {
-            String qstr = "";
-			for (int i = 0; i < Q.length; i++) {
-				qstr += ", " + Q[i];
-			}
-			System.out.println("a(" + a + ") != aMax(" + aMax + ") " + qstr);
-		}*/
         if (randActions != 0 && Rand.successWithPercent(randActions)) {
             a = Rand.i(Q.length);
         }
@@ -242,7 +230,7 @@ public class Brain implements Serializable {
     }
 
     protected double countBoltzman(double q) {
-        return Math.exp(q / temperature);
+        return Math.exp(q / boltzmanTemperature);
     }
 
     /**
@@ -340,23 +328,21 @@ public class Brain implements Serializable {
      * @param change
      */
     private void updateWeights(double change) {
-//        double totalChange = 0;
         if (change != 0) {
             for (int l = w.length - 1; l >= 0; l--) {
                 for (int i = 0; i < w[l].length; i++) {
-                    for (int j = 0; j < w[l][i].length; j++) {
-                        final double delta = alpha * change * e[l][i][j];
-//                        totalChange += Math.abs(delta);
-//                    if (w[l][i][j] + delta == w[l][i][j] && delta != 0.0) {
-//                        totalChange += 1;
-//                    }
-                        w[l][i][j] = w[l][i][j] + delta;
+//                    if (l < w.length - 1 || i == a) {
+                        for (int j = 0; j < w[l][i].length; j++) {
+                            final double delta = alpha * change * e[l][i][j];
+//                            if (w[l][i][j] + delta == w[l][i][j] && delta != 0.0) {
+//                                int totalChange = 1;
+//                            }
+                            w[l][i][j] = w[l][i][j] + delta;
+                        }
                     }
-                }
+//                }
             }
         }
-//        if(totalChange>0)
-//        System.out.println(totalChange);
     }
 
     /**
@@ -474,12 +460,12 @@ public class Brain implements Serializable {
         this.maxWeight = maxWeight;
     }
 
-    public double getTemperature() {
-        return temperature;
+    public double getBoltzmanTemperature() {
+        return boltzmanTemperature;
     }
 
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
+    public void setBoltzmanTemperature(double boltzmanTemperature) {
+        this.boltzmanTemperature = boltzmanTemperature;
     }
 
     public boolean isUseBoltzmann() {

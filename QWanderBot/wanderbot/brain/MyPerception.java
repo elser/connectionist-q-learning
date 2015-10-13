@@ -21,7 +21,7 @@ public class MyPerception extends Perception {
         if (player.collides()) {
             return -0.5;
         }
-        return 0.0;
+        return -0.01;
     }
 
     protected void updateInputValues() {

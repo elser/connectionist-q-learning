@@ -12,9 +12,6 @@ import pl.gdan.elsy.qconf.curiosity.CuriousPlayerPerception;
  * @author dkapusta
  */
 public class CuriPlayer extends Player {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private MyPerception perception;
     private CuriousBrain brain;

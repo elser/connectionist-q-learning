@@ -32,19 +32,18 @@ public class Player {
     public Player(World world) {
         this.world = world;
         r = 8;
-        Action actionArray[] = new Action[5];
+        Action actionArray[] = new Action[4];
         actionArray[MOVE_FORWARD] = new MoveForward(this);
         actionArray[MOVE_BACKWARD] = new MoveBackward(this);
         actionArray[TURN_LEFT] = new TurnLeft(this);
         actionArray[TURN_RIGHT] = new TurnRight(this);
-        actionArray[NOP] = new Nop();
         perception = new MyPerception(this);
         perception.setAddRandomInput(true);
-        brain = new CuriousBrain(perception, actionArray, new int[]{10}, new int[]{200, 100, 100});
-        brain.setAlpha(0.9);
-        brain.setGamma(0.9);
+        brain = new CuriousBrain(perception, actionArray, new int[]{10}, new int[]{30});
+        brain.setAlpha(0.1);
+        brain.setGamma(0.5);
         brain.setLambda(0.5);
-        brain.setRandActions(5);
+        brain.setRandActions(1);
         ErrorBackpropagationNN predictionNN = brain.getCuriosity().getNn();
         predictionNN.setAlpha(0.5);
         predictionNN.setMomentum(0.2);

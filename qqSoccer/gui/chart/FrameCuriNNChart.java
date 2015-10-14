@@ -40,21 +40,29 @@ public class FrameCuriNNChart extends AbstractImageFrame {
 
             step = 0;
             yStep = 10;
-            for (double[][] ww : brain.getW()) {
-                for (double[] www : ww) {
-                    drawNet(Color.red, www, 100, (step++) * yStep, xSize, ySize, 1);
+            for (double[][][] w : brain.getW()) {
+                for (double[][] ww : w) {
+                    for (double[] www : ww) {
+                        drawNet(Color.red, www, 100, (step++) * yStep, xSize, ySize, 1);
+                    }
                 }
+                step+=4;
             }
             step = 0;
-            for (double[][] ww : brain.getE()) {
-                for (double[] www : ww) {
-                    drawNet(Color.magenta, www, 300, (step++) * yStep, xSize, ySize, 10);
+            for (double[][][] w : brain.getE()) {
+                for (double[][] ww : w) {
+                    for (double[] www : ww) {
+                        drawNet(Color.magenta, www, 300, (step++) * yStep, xSize, ySize, 10);
+                    }
                 }
+                step+=4;
             }
             step = 5;
             yStep = 40;
-            for (double[] ww : brain.getActivation()) {
-                    drawNet(Color.blue, ww, 50, (step++) * yStep, xSize, ySize, 0.01);
+            for (double[][] ww : brain.getActivations()) {
+                for (double[] www : ww) {
+                    drawNet(Color.blue, www, 50, (step++) * yStep, xSize, ySize, 1);
+                }
             }
 
         }

@@ -20,7 +20,7 @@ public class CuriPlayer extends Player {
         super(team);
         perception = new MyPerception(this);
         perception.setAddRandomInput(true);
-        brain = new CuriousBrain(perception, vehicle.getActions(), new int[]{20}, new int[]{});
+        brain = new CuriousBrain(perception, vehicle.getActions(), new int[]{10}, new int[]{});
         ErrorBackpropagationNN predictionNN = brain.getCuriosity().getNn();
         predictionNN.setAlpha(0.5);
         predictionNN.setMomentum(0.7);
@@ -36,10 +36,10 @@ public class CuriPlayer extends Player {
      * @see game.Player#live()
      */
     public void live() {
-        brain.setAlpha(0.002);
-        brain.setGamma(0.99);
-        brain.setLambda(0.9);
-        brain.setRandActions(1);
+        brain.setAlpha(0.0001);
+        brain.setGamma(0.9);
+        brain.setLambda(0.5);
+        brain.setRandActionsPercentage(5);
         brain.setUseBoltzmann(true);
         brain.setBoltzmanTemperature(0.01);
 

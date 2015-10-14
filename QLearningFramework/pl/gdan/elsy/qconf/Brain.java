@@ -21,7 +21,11 @@ import java.io.Serializable;
 public class Brain implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * Neuron activation function mode
+     * Number of layers in each NN
+     */
+    private final int layersNr;
+    /**
+     * Neuron activations function mode
      */
     private boolean unipolar = false;
     /**
@@ -32,63 +36,60 @@ public class Brain implements Serializable {
      * Array of actions that can be taken
      */
     private Action[] actionsArray;
+    /**
+     * Input for the whole Brain
+     */
     private double[] input;
+    /**
+     * Array of Q-values
+     */
     private double[] Q;
-    private double layerInput[][];
     /**
-     * Neurons' activation values
+     * Inputs for each layer of every action's NN [action][layer][i]
      */
-    private double activation[][];
+    private double layerInput[][][];
     /**
-     * Weight   matrix [layer][i][j]
+     * Neurons' activations values [action][layer][i]
      */
-    private double w[][][]; // weight   matrix [layer][i][j]
+    private double activations[][][];
     /**
-     * Eligibility traces matrix [layer][i][j]
+     * Weight matrix for every NN [action][layer][j][i]
      */
-    private double e[][][]; // eligibility traces matrix [layer][i][j]
+    private double w[][][][];
     /**
-     * Gradient matrix [layer][i]
+     * Eligibility traces matrix [action][layer][i][j]
      */
-    private double g[][];
+    private double e[][][][];
+    /**
+     * Gradient matrix [action][layer][i]
+     */
+    private double g[][][];
     /**
      * Learning rate
      */
-    private double alpha;
-    private static final double ALPHA_DEFAULT = 0.8;
+    private double alpha = 0.8;
     /**
      * Eligibility traces forgetting rate
      */
-    private double lambda;
-    private static final double LAMBDA_DEFAULT = 0.9;
+    private double lambda = 0.5;
     /**
      * Q-learning Discount factor
      */
-    private double gamma;
-    private static final double GAMMA_DEFAULT = 0.9;
-    /**
-     * Maximum initial weight of neuron connection
-     */
-    private double maxWeight;
-    private static final double MAX_WEIGHT_DEFAULT = 1.0;
-
+    private double gamma = 0.9;
     /**
      * Probability with which random action is selected instead
      * of being selected by the NN
      */
-    private double randActions;
-    private static final double RAND_ACTIONS_DEFAULT = 0.0;
+    private double randActionsPercentage = 0;
     /**
      * Use Boltzmann probability (instead of maximum Q-value)
      */
-    private boolean useBoltzmann;
-    private static final boolean USE_BOLTZMANN_DEFAULT = false;
-    /**
-     * Boltzmann boltzmanTemperature
-     */
-    private double boltzmanTemperature;
-    static final double TEMPERATURE_DEFAULT = 0.03;
+    private boolean useBoltzmann = false;
 
+    /**
+     * Boltzmann temperature
+     */
+    private double boltzmanTemperature = 0.03;
     /**
      * Maximal current Q-value
      */
@@ -98,86 +99,41 @@ public class Brain implements Serializable {
      */
     private double QPrev;
     /**
-     * Array used to calculate Boltzmann probability
+     * Array used to calculate Boltzmann probability (based on Q array)
      */
     private double boltzValues[];
-
     private int tactCounter;
-    private int a;
+    private int currentAction;
     private int executionResult;
-    private int[] neuronsNo;
-    private double[][][] wBackup;
+    private int actionsNr;
 
     /**
      * @param perception      an instance of class extending Perception
      * @param actionsArray    array of actions that can be taken
      * @param hiddenNeuronsNo numbers of neurons in hidden layers
-     * @param alpha           learning rate
-     * @param lambda          eligibility traces forgetting rate
-     * @param gamma           Q-learning Discount factor
-     * @param maxWeight       maximum initial weight of neuron connection
      */
-    public Brain(Perception perception, Action[] actionsArray, int[] hiddenNeuronsNo, double alpha, double lambda, double gamma, boolean useBoltzmann, double temperature, double randActions, double maxWeight) {
+    public Brain(Perception perception, Action[] actionsArray, int[] hiddenNeuronsNo) {
         this.unipolar = perception.isUnipolar();
         perception.start();
         this.perception = perception;
         this.input = perception.getOutput();
         this.actionsArray = actionsArray;
-        this.alpha = alpha;
-        this.lambda = lambda;
-        this.gamma = gamma;
-        this.useBoltzmann = useBoltzmann;
-        this.boltzmanTemperature = temperature;
-        this.randActions = randActions;
-        this.maxWeight = maxWeight;
-        neuronsNo = new int[hiddenNeuronsNo.length + 1];
-        for (int i = 0; i < hiddenNeuronsNo.length; i++) {
+        layersNr = hiddenNeuronsNo.length + 1;
+        actionsNr = actionsArray.length;
+        int[] neuronsNo = new int[layersNr];
+        for (int i = 0; i < layersNr - 1; i++) {
             neuronsNo[i] = hiddenNeuronsNo[i];
         }
-        neuronsNo[neuronsNo.length - 1] = actionsArray.length;
-        activation = createActivationTable(neuronsNo);
+        neuronsNo[layersNr - 1] = 1; // each NN has only 1 output neuron
+        activations = createActivationTable(neuronsNo);
         layerInput = createLayerInputs(neuronsNo);
         w = createWeightTable(neuronsNo);
         e = createWeightTable(neuronsNo);
         g = createActivationTable(neuronsNo);
-        Q = activation[activation.length - 1];
-        boltzValues = new double[Q.length];
+        Q = new double[actionsNr];
+        boltzValues = new double[actionsNr];
         randomize();
         tactCounter = 0;
-    }
-
-    /**
-     * @param perception      - an instance of class implementing Perception
-     * @param actionsArray    - array of actions that can be taken
-     * @param hiddenNeuronsNo - numbers of neurons in hidden layers
-     */
-    public Brain(Perception perception, Action[] actionsArray, int[] hiddenNeuronsNo) {
-        this(
-                perception,
-                actionsArray,
-                hiddenNeuronsNo,
-                ALPHA_DEFAULT,
-                LAMBDA_DEFAULT,
-                GAMMA_DEFAULT,
-                USE_BOLTZMANN_DEFAULT,
-                TEMPERATURE_DEFAULT,
-                RAND_ACTIONS_DEFAULT,
-                MAX_WEIGHT_DEFAULT
-        );
-    }
-
-    /**
-     * Use this constructor for one-layer neural network.
-     *
-     * @param perception   - an instance of class implementing Perception
-     * @param actionsArray - array of actions that can be taken
-     */
-    public Brain(Perception perception, Action[] actionsArray) {
-        this(
-                perception,
-                actionsArray,
-                new int[]{}    // no hidden layers
-        );
     }
 
     /**
@@ -188,16 +144,18 @@ public class Brain implements Serializable {
      * @see Brain#executeAction()
      */
     public void count() {
-        a = selectAction();
+        currentAction = selectAction();
         if (tactCounter > 0) {
             double r = perception.getReward();        // r(t-1)
-            double error = r + gamma * Qmax - QPrev;
-            updateWeights(error);        // w(t)
+            if (r != 0) {
+                double error = r + gamma * Qmax - QPrev;
+                updateWeights(currentAction, error);        // w(t)
+            }
         }
         propagate();
-        countEligibilities(a);        // e(t), g(t)
+        countEligibilities(currentAction);        // e(t), g(t)
         tactCounter++;
-        QPrev = Q[a];
+        QPrev = Q[currentAction];
     }
 
     /**
@@ -206,27 +164,27 @@ public class Brain implements Serializable {
      * @return number of the selected action
      */
     private int selectAction() {
-        int a = -1;
+        int selectedAction = -1;
         Qmax = -1;
         propagate();
-        for (int i = 0; i < Q.length; i++) {
+        for (int a = 0; a < actionsNr; a++) {
             if (useBoltzmann) {
-                boltzValues[i] = countBoltzman(Q[i]);
+                boltzValues[a] = countBoltzman(Q[a]);
             }
-            if (Qmax < Q[i]) {
-                a = i;
-                Qmax = Q[a];
+            if (Qmax < Q[a]) {
+                selectedAction = a;
+                Qmax = Q[selectedAction];
             }
         }
-        //int aMax = a;
+        //int aMax = currentAction;
         if (useBoltzmann) {
-            a = RR.pickBestIndex(boltzValues);
+            selectedAction = RR.pickBestIndex(boltzValues);
         }
-        if (randActions != 0 && Rand.successWithPercent(randActions)) {
-            a = Rand.i(Q.length);
+        if (randActionsPercentage != 0 && Rand.successWithPercent(randActionsPercentage)) {
+            selectedAction = Rand.i(Q.length);
         }
-        Qmax = Q[a];
-        return a;
+        Qmax = Q[selectedAction]; // TODO shouldn't be max anyway (in case of random action)?
+        return selectedAction;
     }
 
     protected double countBoltzman(double q) {
@@ -238,29 +196,29 @@ public class Brain implements Serializable {
      * updates all the eligibility traces. See algorithm description
      * for the details.
      *
-     * @param action
+     * @param a
      */
-    private void countEligibilities(int action) {
-        for (int l = g.length - 1; l >= 0; l--) {
-            for (int i = 0; i < activation[l].length; i++) {
+    private void countEligibilities(int a) {
+        for (int l = layersNr - 1; l >= 0; l--) {
+            for (int i = 0; i < activations[a][l].length; i++) {
                 double error = 0;
-                if (l == g.length - 1) {
-                    error = (i == action) ? 1 : 0;
+                if (l == layersNr - 1) {
+                    error = 1; // TODO suspicious - why always 1?
                 } else {
-                    for (int j = 0; j < activation[l + 1].length; j++) {
-                        error += w[l + 1][j][i] * g[l + 1][j];
+                    for (int j = 0; j < activations[a][l + 1].length; j++) {
+                        error += w[a][l + 1][j][i] * g[a][l + 1][j];
                     }
                 }
-                double activ = activation[l][i];
+                double activation = activations[a][l][i];
                 double gli;
                 if (unipolar) {
-                    gli = activ * (1 - activ) * error; //uni
+                    gli = activation * (1 - activation) * error; //uni
                 } else {
-                    gli = 0.5 * (1 - activ * activ) * error; //bi
+                    gli = 0.5 * (1 - activation * activation) * error; //bi
                 }
-                g[l][i] = gli;
-                for (int j = 0; j < w[l][i].length; j++) {
-                    e[l][i][j] = gamma * lambda * e[l][i][j] + gli * layerInput[l][j];
+                g[a][l][i] = gli;
+                for (int j = 0; j < w[a][l][i].length; j++) {
+                    e[a][l][i][j] = gamma * lambda * e[a][l][i][j] + gli * layerInput[a][l][j];
                 }
             }
         }
@@ -270,20 +228,12 @@ public class Brain implements Serializable {
      * Randomizes all the weights of neurons' connections.
      */
     public void randomize() {
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                for (int j = 0; j < w[l][i].length; j++) {
-                    w[l][i][j] = randWeight();
-                }
-            }
-        }
-    }
-
-    public void inheritFrom(Brain brain, Brain brain2) {
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                for (int j = 0; j < w[l][i].length; j++) {
-                    w[l][i][j] = brain.w[l][i][j];
+        for (int a = 0; a < actionsNr; a++) {
+            for (int l = 0; l < w[a].length; l++) {
+                for (int i = 0; i < w[a][l].length; i++) {
+                    for (int j = 0; j < w[a][l][i].length; j++) {
+                        w[a][l][i][j] = randWeight();
+                    }
                 }
             }
         }
@@ -295,7 +245,7 @@ public class Brain implements Serializable {
      * @return random weight value
      */
     private double randWeight() {
-        return Rand.d(-maxWeight, maxWeight);
+        return Rand.d(-0.5, 0.5);
     }
 
     /**
@@ -303,21 +253,21 @@ public class Brain implements Serializable {
      * In other words, it updates the activations of all the neurons.
      */
     protected void propagate() {
-        double weightedSum = 0;
-        double wli[];
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                weightedSum = 0;
-                wli = w[l][i];
-                for (int j = 0; j < wli.length; j++) {
-                    weightedSum += wli[j] * layerInput[l][j];
-                }
-                if (unipolar) {
-                    activation[l][i] = Mat.sigmoidUni(weightedSum);
-                } else {
-                    activation[l][i] = Mat.sigmoidBi(weightedSum);
+        for (int a = 0; a < actionsNr; a++) {
+            for (int l = 0; l < layersNr; l++) {
+                for (int i = 0; i < w[a][l].length; i++) {
+                    double weightedSum = 0;
+                    for (int j = 0; j < w[a][l][i].length; j++) {
+                        weightedSum += w[a][l][i][j] * layerInput[a][l][j];
+                    }
+                    if (unipolar) {
+                        activations[a][l][i] = Mat.sigmoidUni(weightedSum);
+                    } else {
+                        activations[a][l][i] = Mat.sigmoidBi(weightedSum);
+                    }
                 }
             }
+            Q[a] = activations[a][layersNr - 1][0];
         }
     }
 
@@ -327,19 +277,18 @@ public class Brain implements Serializable {
      *
      * @param change
      */
-    private void updateWeights(double change) {
+    private void updateWeights(int a, double change) {
         if (change != 0) {
-            for (int l = w.length - 1; l >= 0; l--) {
-                for (int i = 0; i < w[l].length; i++) {
-//                    if (l < w.length - 1 || i == a) {
-                        for (int j = 0; j < w[l][i].length; j++) {
-                            final double delta = alpha * change * e[l][i][j];
+            for (int l = w[a].length - 1; l >= 0; l--) {
+                for (int i = 0; i < w[a][l].length; i++) {
+                    for (int j = 0; j < w[a][l][i].length; j++) {
+                        final double delta = alpha * change * e[a][l][i][j];
 //                            if (w[l][i][j] + delta == w[l][i][j] && delta != 0.0) {
 //                                int totalChange = 1;
 //                            }
-                            w[l][i][j] = w[l][i][j] + delta;
-                        }
+                        w[a][l][i][j] = w[a][l][i][j] + delta;
                     }
+                }
 //                }
             }
         }
@@ -353,35 +302,17 @@ public class Brain implements Serializable {
      * @param percent
      */
     public void mutate(double percent) {
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                for (int j = 0; j < w[l][i].length; j++) {
-                    if (Rand.successWithPercent(percent)) {
-                        w[l][i][j] = randWeight();
+        for (int a = 0; a < actionsNr; a++) {
+            for (int l = 0; l < w[a].length; l++) {
+                for (int i = 0; i < w[a][l].length; i++) {
+                    for (int j = 0; j < w[a][l][i].length; j++) {
+                        if (Rand.successWithPercent(percent)) {
+                            w[a][l][i][j] = randWeight();
+                        }
                     }
                 }
             }
         }
-    }
-
-    public void printStats() {
-        double maxWght = 0;
-        double avgWght = 0;
-        int wghtNo = 0;
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                for (int j = 0; j < w[l][i].length; j++) {
-                    double wabs = Math.abs(w[l][i][j]);
-                    if (maxWght < wabs) {
-                        maxWght = wabs;
-                    }
-                    avgWght += wabs;
-                    wghtNo++;
-                }
-            }
-        }
-        avgWght /= wghtNo;
-        System.out.println("Max=" + maxWght + " Avg=" + avgWght + " No=" + wghtNo);
     }
 
     /**
@@ -389,12 +320,14 @@ public class Brain implements Serializable {
      * the new learning episode starts.
      */
     public void reset() {
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                for (int j = 0; j < w[l][i].length; j++) {
-                    e[l][i][j] = 0;
+        for (int a = 0; a < actionsNr; a++) {
+            for (int l = 0; l < e[a].length; l++) {
+                for (int i = 0; i < e[a][l].length; i++) {
+                    for (int j = 0; j < e[a][l][i].length; j++) {
+                        e[a][l][i][j] = 0;
+                    }
+                    g[a][l][i] = 0;
                 }
-                g[l][i] = 0;
             }
         }
         tactCounter = 0;
@@ -404,7 +337,7 @@ public class Brain implements Serializable {
      * Returns the index of the selected action
      */
     public int getAction() {
-        return a;
+        return currentAction;
     }
 
     /**
@@ -421,7 +354,7 @@ public class Brain implements Serializable {
      * Call it after calling Brain.count() method.
      */
     public void executeAction() {
-        executionResult = actionsArray[a].execute();
+        executionResult = actionsArray[currentAction].execute();
     }
 
     public double[] getOutput() {
@@ -452,14 +385,6 @@ public class Brain implements Serializable {
         this.lambda = lambda;
     }
 
-    public double getMaxWeight() {
-        return maxWeight;
-    }
-
-    public void setMaxWeight(double maxWeight) {
-        this.maxWeight = maxWeight;
-    }
-
     public double getBoltzmanTemperature() {
         return boltzmanTemperature;
     }
@@ -484,12 +409,12 @@ public class Brain implements Serializable {
         this.unipolar = unipolar;
     }
 
-    public double getRandActions() {
-        return randActions;
+    public double getRandActionsPercentage() {
+        return randActionsPercentage;
     }
 
-    public void setRandActions(double randActions) {
-        this.randActions = randActions;
+    public void setRandActionsPercentage(double randActionsPercentage) {
+        this.randActionsPercentage = randActionsPercentage;
     }
 
     /**
@@ -498,13 +423,15 @@ public class Brain implements Serializable {
      * @param neuronsNo
      * @return
      */
-    private double[][] createLayerInputs(int[] neuronsNo) {
-        double[][] ret = new double[neuronsNo.length][];
-        for (int l = 0; l < neuronsNo.length; l++) {
-            if (l == 0) {
-                ret[l] = input;
-            } else {
-                ret[l] = activation[l - 1];
+    private double[][][] createLayerInputs(int[] neuronsNo) {
+        double[][][] ret = new double[actionsNr][neuronsNo.length][];
+        for (int a = 0; a < actionsNr; a++) {
+            for (int l = 0; l < neuronsNo.length; l++) {
+                if (l == 0) {
+                    ret[a][l] = input;
+                } else {
+                    ret[a][l] = activations[a][l - 1];
+                }
             }
         }
         return ret;
@@ -516,10 +443,12 @@ public class Brain implements Serializable {
      * @param neuronsNo
      * @return
      */
-    private double[][] createActivationTable(int[] neuronsNo) {
-        double[][] ret = new double[neuronsNo.length][];
-        for (int l = 0; l < ret.length; l++) {
-            ret[l] = new double[neuronsNo[l]];
+    private double[][][] createActivationTable(int[] neuronsNo) {
+        double[][][] ret = new double[actionsNr][layersNr][];
+        for (int a = 0; a < actionsNr; a++) {
+            for (int l = 0; l < layersNr; l++) {
+                ret[a][l] = new double[neuronsNo[l]];
+            }
         }
         return ret;
     }
@@ -530,56 +459,14 @@ public class Brain implements Serializable {
      * @param neuronsNo
      * @return
      */
-    private double[][][] createWeightTable(int[] neuronsNo) {
-        double[][][] ret = new double[neuronsNo.length][][];
-        for (int l = 0; l < ret.length; l++) {
-            ret[l] = new double[neuronsNo[l]][layerInput[l].length];
+    private double[][][][] createWeightTable(int[] neuronsNo) {
+        double[][][][] ret = new double[actionsNr][layersNr][][];
+        for (int a = 0; a < actionsNr; a++) {
+            for (int l = 0; l < layersNr; l++) {
+                ret[a][l] = new double[neuronsNo[l]][layerInput[a][l].length];
+            }
         }
         return ret;
-    }
-
-    /**
-     * Returns the maximal absolute value of all the weights
-     *
-     * @return
-     */
-    public double getMaxW() {
-        double ret = 0.0;
-        int no = 0;
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                for (int j = 0; j < w[l][i].length; j++) {
-                    ret += Math.abs(w[l][i][j]);
-                    no++;
-                }
-            }
-        }
-        return ret / no;
-    }
-
-    public void backup() {
-        if (wBackup == null) {
-            wBackup = createWeightTable(neuronsNo);
-        }
-        for (int l = 0; l < w.length; l++) {
-            for (int i = 0; i < w[l].length; i++) {
-                for (int j = 0; j < w[l][i].length; j++) {
-                    wBackup[l][i][j] = w[l][i][j];
-                }
-            }
-        }
-    }
-
-    public void restore() {
-        if (wBackup != null) {
-            for (int l = 0; l < w.length; l++) {
-                for (int i = 0; i < w[l].length; i++) {
-                    for (int j = 0; j < w[l][i].length; j++) {
-                        w[l][i][j] = wBackup[l][i][j];
-                    }
-                }
-            }
-        }
     }
 
     public void set(Brain brain) {
@@ -596,24 +483,20 @@ public class Brain implements Serializable {
         return input;
     }
 
-    public double[][][] getE() {
+    public double[][][][] getE() {
         return e;
     }
 
-    public double[][] getG() {
+    public double[][][] getG() {
         return g;
     }
 
-    public double[][][] getW() {
+    public double[][][][] getW() {
         return w;
     }
 
-    public double[][] getActivation() {
-        return activation;
-    }
-
-    public void setW(double[][][] w) {
-        this.w = w;
+    public double[][][] getActivations() {
+        return activations;
     }
 
     public void save(String filename) throws FileNotFoundException, IOException {
@@ -624,7 +507,7 @@ public class Brain implements Serializable {
 
     public void load(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
-        w = (double[][][]) in.readObject();
+        w = (double[][][][]) in.readObject();
         in.close();
     }
 

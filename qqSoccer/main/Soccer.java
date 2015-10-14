@@ -15,7 +15,7 @@ public class Soccer {
      */
     public static void main(String[] args) {
         facade = new Facade(new FrameMain(), new CuriGameManager());
-        int opt = 0;
+        int opt = 1;
         if (args != null && args.length > 0) {
             opt = Integer.parseInt(args[0]);
         }

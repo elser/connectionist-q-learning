@@ -2,11 +2,15 @@ package wanderbot;
 
 import java.applet.Applet;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class Wanderbot extends Applet implements Runnable {
     private static final long serialVersionUID = 1L;
+    protected static final int SPEEDS = 3;
+    private int speed = 1;
     protected Thread runner = null;
     private World world;
     public static boolean running = false;
@@ -15,25 +19,54 @@ public class Wanderbot extends Applet implements Runnable {
     public Wanderbot() {
         world = new World();
         graphic = new Graphic(this, world);
+        addMouseListener(new MouseListener() {
+            public void mouseExited(MouseEvent e) {
+            }
+
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            public void mousePressed(MouseEvent e) {
+            }
+
+            public void mouseClicked(MouseEvent e) {
+                speed = (speed + 1) % SPEEDS;
+            }
+        });
     }
 
     public void run() {
         Thread me = Thread.currentThread();
         while (runner == me) {
             try {
-                Thread.sleep(10);
-                threadAction();
+                switch (speed) {
+                    case 0:
+                        Thread.sleep(500);
+                        world.count();
+                        break;
+                    case 1:
+                        Thread.sleep(2);
+                        world.count();
+                        break;
+                    case 2:
+                        for (int i = 0; i < 1000; i++) {
+                            world.count();
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+                graphic.drawAll();
             } catch (InterruptedException e) {
                 stop();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void threadAction() {
-        world.count();
-        graphic.drawAll();
     }
 
     public void start() {

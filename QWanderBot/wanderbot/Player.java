@@ -33,11 +33,12 @@ public class Player {
         actionArray[TURN_LEFT] = new TurnLeft(this);
         actionArray[TURN_RIGHT] = new TurnRight(this);
         perception = new MyPerception(this);
-        brain = new Brain(perception, actionArray, new int[] {}, 0.5, 0.9, 0.9, false, 0.05, 5, 0.2);
-//        brain.setAlpha(0.5);
-//        brain.setGamma(0.5);
-//        brain.setLambda(0.8);
-//        brain.setRandActions(1);
+        brain = new Brain(perception, actionArray, new int[] {});
+        brain.setAlpha(0.5);
+        brain.setGamma(0.9);
+        brain.setLambda(0.5);
+        brain.setUseBoltzmann(true);
+        brain.setRandActionsPercentage(5);
     }
 
     public void count() {
@@ -56,8 +57,7 @@ public class Player {
         double yOld = y;
         x += Math.cos(angle) * step;
         y += Math.sin(angle) * step;
-//        if (world.isCollision()) {
-        if(perception.getFrontPixel()>0.5) {
+        if(perception.getFrontPixel()>0.4) {
             x = xOld;
             y = yOld;
             return 0;

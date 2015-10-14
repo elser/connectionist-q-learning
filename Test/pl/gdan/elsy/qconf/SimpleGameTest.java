@@ -16,7 +16,11 @@ public class SimpleGameTest {
         final int bucketsNr = 4;
         Action[] actionsArray = new Action[bucketsNr];
         perception = new GamePerceptionMock(bucketsNr);
-        brain = new Brain(perception, actionsArray, new int[]{10}, 0.2, 0.0, 0.0, false, 0, 0, 1);
+        brain = new Brain(perception, actionsArray, new int[]{10});
+        brain.setAlpha(0.2);
+        brain.setGamma(0);
+        brain.setLambda(0);
+        brain.setRandActionsPercentage(0);
     }
 
     @Test

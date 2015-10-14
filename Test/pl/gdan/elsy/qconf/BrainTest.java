@@ -22,7 +22,11 @@ public class BrainTest {
     public void setUp() throws Exception {
         Action[] actionsArray = new Action[1];
         perception = new PerceptionMock();
-        brain = new Brain(perception, actionsArray, new int[]{}, 1.0, 0.9, 0.0, false, Brain.TEMPERATURE_DEFAULT, 0, 5);
+        brain = new Brain(perception, actionsArray, new int[]{});
+        brain.setAlpha(1);
+        brain.setGamma(0.9);
+        brain.setLambda(0);
+        brain.setRandActionsPercentage(0);
     }
 
     @Test

@@ -10,11 +10,11 @@ import java.awt.event.WindowEvent;
 public class Curiousbot extends Applet implements Runnable {
     private static final long serialVersionUID = 1L;
     protected static final int SPEEDS = 3;
+    private int speed = 1;
     protected Thread runner = null;
     private World world;
     public static boolean running = false;
     private Graphic graphic;
-    private int speed = 1;
 
     public Curiousbot() {
         world = new World();

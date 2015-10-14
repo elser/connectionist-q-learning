@@ -3,7 +3,6 @@ package curiousbot;
 import curiousbot.brain.MyPerception;
 import curiousbot.brain.actions.MoveBackward;
 import curiousbot.brain.actions.MoveForward;
-import curiousbot.brain.actions.Nop;
 import curiousbot.brain.actions.TurnLeft;
 import curiousbot.brain.actions.TurnRight;
 import pl.gdan.elsy.qconf.Action;
@@ -43,7 +42,7 @@ public class Player {
         brain.setAlpha(0.1);
         brain.setGamma(0.5);
         brain.setLambda(0.5);
-        brain.setRandActions(1);
+        brain.setRandActionsPercentage(1);
         ErrorBackpropagationNN predictionNN = brain.getCuriosity().getNn();
         predictionNN.setAlpha(0.5);
         predictionNN.setMomentum(0.2);

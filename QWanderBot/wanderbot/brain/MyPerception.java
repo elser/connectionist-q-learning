@@ -7,7 +7,7 @@ public class MyPerception extends Perception {
     private static final long serialVersionUID = 1L;
     public static final double RADAR_R = 0.5;
     public static final double RADAR_D = 10;
-    public static final int RADAR_ANGLES = 2;
+    public static final int RADAR_ANGLES = 5;
     public static final int RADAR_STEPS = 2;
     private Player player;
 

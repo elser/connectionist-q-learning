@@ -40,6 +40,9 @@ public class Wanderbot extends Applet implements Runnable {
 
     public void run() {
         Thread me = Thread.currentThread();
+        for (int i = 0; i < 10000; i++) {
+            world.count();
+        }
         while (runner == me) {
             try {
                 switch (speed) {

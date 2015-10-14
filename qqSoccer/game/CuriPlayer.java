@@ -39,7 +39,7 @@ public class CuriPlayer extends Player {
         brain.setAlpha(0.002);
         brain.setGamma(0.99);
         brain.setLambda(0.9);
-        brain.setRandActions(1);
+        brain.setRandActionsPercentage(1);
         brain.setUseBoltzmann(true);
         brain.setBoltzmanTemperature(0.01);
 

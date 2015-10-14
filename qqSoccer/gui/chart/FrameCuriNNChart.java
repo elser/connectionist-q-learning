@@ -53,7 +53,7 @@ public class FrameCuriNNChart extends AbstractImageFrame {
             }
             step = 5;
             yStep = 40;
-            for (double[] ww : brain.getActivation()) {
+            for (double[] ww : brain.getActivations()) {
                     drawNet(Color.blue, ww, 50, (step++) * yStep, xSize, ySize, 0.01);
             }
 

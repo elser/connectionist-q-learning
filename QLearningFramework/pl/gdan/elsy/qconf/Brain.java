@@ -145,7 +145,9 @@ public class Brain implements Serializable {
      * @see Brain#executeAction()
      */
     public void count() {
-        activations = activation;
+        if (activation != null) {
+            activations = activation;
+        }
         currentAction = selectAction();
         if (tactCounter > 0) {
             double r = perception.getReward();        // r(t-1)
@@ -252,12 +254,10 @@ public class Brain implements Serializable {
      * In other words, it updates the activations of all the neurons.
      */
     protected void propagate() {
-        double weightedSum = 0;
-        double wli[];
         for (int l = 0; l < w.length; l++) {
             for (int i = 0; i < w[l].length; i++) {
-                weightedSum = 0;
-                wli = w[l][i];
+                double weightedSum = 0;
+                double[] wli = w[l][i];
                 for (int j = 0; j < wli.length; j++) {
                     weightedSum += wli[j] * layerInput[l][j];
                 }
@@ -281,14 +281,14 @@ public class Brain implements Serializable {
             for (int l = w.length - 1; l >= 0; l--) {
                 for (int i = 0; i < w[l].length; i++) {
 //                    if (l < w.length - 1 || i == a) {
-                        for (int j = 0; j < w[l][i].length; j++) {
-                            final double delta = alpha * change * e[l][i][j];
+                    for (int j = 0; j < w[l][i].length; j++) {
+                        final double delta = alpha * change * e[l][i][j];
 //                            if (w[l][i][j] + delta == w[l][i][j] && delta != 0.0) {
 //                                int totalChange = 1;
 //                            }
-                            w[l][i][j] = w[l][i][j] + delta;
-                        }
+                        w[l][i][j] = w[l][i][j] + delta;
                     }
+                }
 //                }
             }
         }

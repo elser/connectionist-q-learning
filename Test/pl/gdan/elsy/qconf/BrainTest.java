@@ -24,9 +24,10 @@ public class BrainTest {
         perception = new PerceptionMock();
         brain = new Brain(perception, actionsArray, new int[]{});
         brain.setAlpha(1);
-        brain.setGamma(0.9);
+        brain.setGamma(0);
         brain.setLambda(0);
         brain.setRandActionsPercentage(0);
+        brain.setUseBoltzmann(false);
     }
 
     @Test
@@ -37,19 +38,20 @@ public class BrainTest {
             perception.setReward(reward);
             perception.getOutput()[0] = 1;
             if (i < 1 || i >= 95) {
-                System.out.println(Arrays.toString(perception.getOutput()) + " " + Arrays.deepToString(brain.getW()) + " " + Arrays.toString(brain.getOutput()));
+                System.out.println(Arrays.toString(perception.getOutput()) + " " + Arrays.deepToString(brain.getW()) +
+                        " " + Arrays.toString(brain.getOutput()));
             }
         }
         Assert.assertThat(brain.getOutput()[0], is(closeTo(reward, 0.1)));
     }
 
-
-    @Test
-    public void testCountBoltzman() throws Exception {
-        for (int i = -10; i < 10; i++) {
-            final double q = 0.1 * i;
-            final double boltzman = brain.countBoltzman(q);
-            System.out.println(q + " " + boltzman);
-        }
-    }
+//
+//    @Test
+//    public void testCountBoltzman() throws Exception {
+//        for (int i = -10; i < 10; i++) {
+//            final double q = 0.1 * i;
+//            final double boltzman = brain.countBoltzman(q);
+//            System.out.println(q + " " + boltzman);
+//        }
+//    }
 }

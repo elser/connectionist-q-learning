@@ -7,12 +7,12 @@ import pl.gdan.elsy.qconf.Perception;
  *
  * @since v7.0
  */
-public class GamePerceptionMock extends Perception {
+public class SimpleGamePerceptionMock extends Perception {
     private final int inputsNr;
-    private int counter = 0;
-    private boolean reward;
+    private double reward;
+    private int bucket;
 
-    public GamePerceptionMock(int inputsNr) {
+    public SimpleGamePerceptionMock(int inputsNr) {
         this.inputsNr = inputsNr;
     }
 
@@ -23,22 +23,25 @@ public class GamePerceptionMock extends Perception {
 
     @Override
     public double getReward() {
-        return reward ? 0.8 : 0;
+        return reward;
     }
 
     @Override
     protected void updateInputValues() {
         for (int i = 0; i < inputsNr; i++) {
-            setNextValue(getActiveBucket() == i);
+            setNextValue(getBucket() == i);
         }
-        counter++;
     }
 
-    public int getActiveBucket() {
-        return counter % inputsNr;
+    public int getBucket() {
+        return bucket;
     }
 
-    public void setReward(boolean reward) {
+    public void setReward(double reward) {
         this.reward = reward;
+    }
+
+    public void setBucket(int bucket) {
+        this.bucket = bucket;
     }
 }

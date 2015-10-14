@@ -23,6 +23,7 @@ public class BrainTest {
         Action[] actionsArray = new Action[1];
         perception = new PerceptionMock();
         brain = new Brain(perception, actionsArray, new int[]{});
+        brain.randomize(123l);
         brain.setAlpha(1);
         brain.setGamma(0);
         brain.setLambda(0);
@@ -45,6 +46,11 @@ public class BrainTest {
         Assert.assertThat(brain.getOutput()[0], is(closeTo(reward, 0.1)));
     }
 
+    @Test
+    public void testRandomizeWithSeed() throws Exception {
+        brain.randomize(123l);
+        Assert.assertThat(brain.getW()[0][0][0], is(closeTo(0.22317420299714685, 0.1)));
+    }
 //
 //    @Test
 //    public void testCountBoltzman() throws Exception {

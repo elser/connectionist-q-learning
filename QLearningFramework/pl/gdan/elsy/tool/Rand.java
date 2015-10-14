@@ -15,9 +15,13 @@ public class Rand {
     static Random random = null;
 
     static {
-        random = new Random();
+        random = new Random(123l);
         arrPercent = new double[arrPercentSize];
         setArrPercent();
+    }
+
+    public static void setSeed(long seed) {
+        random = new Random(seed);
     }
 
     /**

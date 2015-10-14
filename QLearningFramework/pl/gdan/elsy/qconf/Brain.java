@@ -230,6 +230,18 @@ public class Brain implements Serializable {
      * Randomizes all the weights of neurons' connections.
      */
     public void randomize() {
+        randomize(null);
+    }
+
+    /**
+     * Randomizes all the weights of neurons' connections.
+     *
+     * @param seed
+     */
+    public void randomize(Long seed) {
+        if (seed != null) {
+            Rand.setSeed(seed);
+        }
         for (int l = 0; l < w.length; l++) {
             for (int i = 0; i < w[l].length; i++) {
                 for (int j = 0; j < w[l][i].length; j++) {

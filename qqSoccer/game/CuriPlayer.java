@@ -36,8 +36,8 @@ public class CuriPlayer extends Player {
      * @see game.Player#live()
      */
     public void live() {
-        brain.setAlpha(0.0001);
-        brain.setGamma(0.9);
+        brain.setAlpha(0.01);
+        brain.setGamma(0.99);
         brain.setLambda(0.5);
         brain.setRandActionsPercentage(5);
         brain.setUseBoltzmann(true);

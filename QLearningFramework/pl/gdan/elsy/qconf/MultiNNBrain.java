@@ -18,7 +18,7 @@ import java.io.Serializable;
  *
  * @author Elser
  */
-public class Brain implements Serializable {
+public class MultiNNBrain implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * Number of layers in each NN
@@ -112,7 +112,7 @@ public class Brain implements Serializable {
      * @param actionsArray    array of actions that can be taken
      * @param hiddenNeuronsNo numbers of neurons in hidden layers
      */
-    public Brain(Perception perception, Action[] actionsArray, int[] hiddenNeuronsNo) {
+    public MultiNNBrain(Perception perception, Action[] actionsArray, int[] hiddenNeuronsNo) {
         this.unipolar = perception.isUnipolar();
         perception.start();
         this.perception = perception;
@@ -141,7 +141,7 @@ public class Brain implements Serializable {
      * It is responsible for selecting the action and updating weights.
      * DOES NOT execute any action. For this use Brain.execute() method.
      *
-     * @see Brain#executeAction()
+     * @see MultiNNBrain#executeAction()
      */
     public void count() {
         currentAction = selectAction();
@@ -469,7 +469,7 @@ public class Brain implements Serializable {
         return ret;
     }
 
-    public void set(Brain brain) {
+    public void set(MultiNNBrain brain) {
         for (int l = 0; l < w.length; l++) {
             for (int i = 0; i < w[l].length; i++) {
                 for (int j = 0; j < w[l][i].length; j++) {
